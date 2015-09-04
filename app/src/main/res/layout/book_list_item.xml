@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip" >
+                android:padding="6dip"
+                android:layout_marginLeft="16sp"
+                android:layout_marginRight="16sp"
+>
 
     <ImageView
         android:id="@+id/fullBookCover"
@@ -24,7 +27,6 @@
         android:layout_toRightOf="@id/fullBookCover"
         android:gravity="center_vertical"
         android:ellipsize="end"
-        android:layout_marginRight="10dp"
         android:maxLines="1"
         android:textSize="16sp" />
 
@@ -37,7 +39,6 @@
         android:textSize="12sp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/fullBookCover"
         android:layout_toEndOf="@+id/fullBookCover"/>

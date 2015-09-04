@@ -3,9 +3,14 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#ec203e</item>
-        <item name="colorPrimaryDark">#b81630</item>
-        <item name="colorAccent">#ec9600</item>
+        <item name="colorPrimary">@color/red_primary</item>
+        <item name="colorPrimaryDark">@color/red_primary_dark</item>
+        <item name="colorAccent">@color/red_accent</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/red_primary</item>
     </style>
 
+    <color name="red_primary">#ec203e</color>
+    <color name="red_primary_dark">#b81630</color>
+    <color name="red_accent">#ec9600</color>
 </resources>

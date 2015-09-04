@@ -3,9 +3,7 @@
     <string name="app_name">Alexandria</string>
 
     <!-- Menu Items -->
-    <string name="books">List of Books</string>
-    <string name="scan">Scan/Add a Book</string>
-    <string name="about">About this App</string>
+
 
     <string name="navigation_drawer_open" >Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -28,9 +26,16 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="about_text">This application gets book information from a Google API. All titles, cover images, and author information come from there.
     The original version of this app was built by Sascha Jaschke, and a modified version is given to students in the Udacity Android Nanodegree program. </string>
-    <string name="title_activity_camera">CameraActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search Your Books</string>
+    <string name="empty_message">No books found… Tap on + to Scan/Add a book!</string>
+    <string name="my_books">My Books</string>
+    <string name="add_book">Add/Scan Book</string>
+    <string name="books">List of Books</string>
+    <string name="about">About this App</string>
+    <string name="details">Book Details</string>
 </resources>

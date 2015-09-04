@@ -198,6 +198,8 @@ public class BookService extends IntentService {
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Error ", e);
+        } catch (NullPointerException e){
+            Log.e(LOG_TAG, "Error "+e.toString());
         }
     }
 

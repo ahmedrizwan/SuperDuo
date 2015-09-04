@@ -40,7 +40,6 @@ public class BookProvider extends ContentProvider {
                 " LEFT OUTER JOIN " +  AlexandriaContract.CategoryEntry.TABLE_NAME + " USING (" +AlexandriaContract.BookEntry._ID + ")");
     }
 
-
     private static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -218,6 +217,7 @@ public class BookProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 getContext().getContentResolver().notifyChange(AlexandriaContract.BookEntry.buildFullBookUri(_id), null);
+
                 break;
             }
             case AUTHOR:{
@@ -239,6 +239,7 @@ public class BookProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -271,7 +272,8 @@ public class BookProvider extends ContentProvider {
         }
         // Because a null deletes all rows
         if (selection == null || rowsDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver()
+                    .notifyChange(uri, null);
         }
         return rowsDeleted;
     }
