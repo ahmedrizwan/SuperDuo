@@ -244,4 +244,5 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 .setVisibility(View.INVISIBLE);
     }
 
+
 }

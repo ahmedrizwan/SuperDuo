@@ -2,7 +2,9 @@ package it.jaschke.alexandria;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import javax.inject.Inject;
 
@@ -24,5 +26,20 @@ public class BaseActivity extends AppCompatActivity {
 
     protected AppComponent getApplicationComponent() {
         return ((App)getApplication()).getAppComponent();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
