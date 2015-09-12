@@ -18,7 +18,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import it.jaschke.alexandria.MainActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
@@ -187,6 +190,7 @@ public class BookService extends IntentService {
                 imgUrl = bookInfo.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
             }
 
+
             writeBackBook(ean, title, subtitle, desc, imgUrl);
 
             if(bookInfo.has(AUTHORS)) {
@@ -210,26 +214,73 @@ public class BookService extends IntentService {
         values.put(AlexandriaContract.BookEntry.IMAGE_URL, imgUrl);
         values.put(AlexandriaContract.BookEntry.SUBTITLE, subtitle);
         values.put(AlexandriaContract.BookEntry.DESC, desc);
-        getContentResolver().insert(AlexandriaContract.BookEntry.CONTENT_URI,values);
+        //Send values back to the fragment
+        EventBus.getDefault().post(new BookEvent(values));
+//        getContentResolver().insert(AlexandriaContract.BookEntry.CONTENT_URI,values);
     }
 
     private void writeBackAuthors(String ean, JSONArray jsonArray) throws JSONException {
+        AuthorEvent authorEvent = new AuthorEvent(new ArrayList<>());
         ContentValues values= new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(AlexandriaContract.AuthorEntry._ID, ean);
             values.put(AlexandriaContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
-            getContentResolver().insert(AlexandriaContract.AuthorEntry.CONTENT_URI, values);
+            authorEvent.getAuthorValues()
+                    .add(values);
+//            getContentResolver().insert(AlexandriaContract.AuthorEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
+        EventBus.getDefault().post(authorEvent);
     }
 
     private void writeBackCategories(String ean, JSONArray jsonArray) throws JSONException {
+        CategoryEvent categoryEvent = new CategoryEvent(new ArrayList<>());
         ContentValues values= new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(AlexandriaContract.CategoryEntry._ID, ean);
             values.put(AlexandriaContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
-            getContentResolver().insert(AlexandriaContract.CategoryEntry.CONTENT_URI, values);
+            categoryEvent.getCategoryValues()
+                    .add(values);
+//            getContentResolver().insert(AlexandriaContract.CategoryEntry.CONTENT_URI, values);
             values= new ContentValues();
+        }
+        EventBus.getDefault().post(categoryEvent);
+    }
+
+    public class BookEvent{
+        ContentValues bookValues;
+
+        public BookEvent(final ContentValues bookValues) {
+            this.bookValues = bookValues;
+        }
+
+        public ContentValues getBookValues() {
+            return bookValues;
+        }
+    }
+
+    public class AuthorEvent{
+        List<ContentValues> authorValues;
+
+        public AuthorEvent(final List<ContentValues> authorValues) {
+            this.authorValues = authorValues;
+        }
+
+        public List<ContentValues> getAuthorValues() {
+            return authorValues;
+        }
+    }
+
+    public class CategoryEvent{
+        List<ContentValues> categoryValues;
+
+        public List<ContentValues> getCategoryValues() {
+            return categoryValues;
+        }
+
+        public CategoryEvent(final List<ContentValues> categoryValues) {
+
+            this.categoryValues = categoryValues;
         }
     }
  }
