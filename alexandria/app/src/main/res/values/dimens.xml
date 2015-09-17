@@ -4,5 +4,7 @@
     <integer name="ean_width">8</integer>
     <dimen name="head_line">24sp</dimen>
     <dimen name="small_fontsize">12sp</dimen>
+    <dimen name="default_margin">16sp</dimen>
+    <dimen name="iv_search_margin">6sp</dimen>
 
 </resources>

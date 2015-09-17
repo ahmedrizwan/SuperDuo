@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import it.jaschke.alexandria.BaseActivity;
+import it.jaschke.alexandria.FragmentNavigation;
+import it.jaschke.alexandria.MainActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.SettingsActivity;
 import it.jaschke.alexandria.api.BookListAdapter;
@@ -30,14 +32,14 @@ import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.databinding.FragmentListOfBooksBinding;
 
 
-public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, Callback {
 
     private BookListAdapter bookListAdapter;
     private int position = ListView.INVALID_POSITION;
     private final int LOADER_ID = 10;
     FragmentListOfBooksBinding mFragmentListOfBooksBinding;
     Cursor cursor;
-    private String mSearchQuery="";
+    private String mSearchQuery = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,18 +67,13 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         //Item click listener for the listView
         mFragmentListOfBooksBinding.listOfBooks.setOnItemClickListener((adapterView, view, position1, l) -> {
             if (cursor != null && cursor.moveToPosition(position1)) {
-                ((Callback) getActivity())
-                        .onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
+                onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
             }
         });
 
         mFragmentListOfBooksBinding.fab.setOnClickListener(view -> {
-            //launch the fragment for scan
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.includeContainer, new AddBook())
-                    .addToBackStack(null)
-                    .commit();
+            FragmentNavigation.launchAddBooksFragment((BaseActivity) getActivity(),
+                    ((MainActivity) getActivity()).getBinding());
         });
 
         //Hide the Up button
@@ -105,7 +102,8 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         SearchManager searchManager =
                 (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
+                (SearchView) menu.findItem(R.id.search)
+                        .getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconifiedByDefault(false);
@@ -128,7 +126,7 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 //launch the settings activity from here
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
@@ -189,6 +187,29 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public void onResume() {
         super.onResume();
+
+    }
+
+
+    @Override
+    public void onItemSelected(String ean) {
+        Bundle args = new Bundle();
+        args.putString(BookDetail.EAN_KEY, ean);
+
+        BookDetail fragment = new BookDetail();
+        fragment.setArguments(args);
+
+//        int id = R.id.includeContainer;
+////        if (findViewById(R.id.right_container) != null) {
+////            id = R.id.right_container;
+////        }
+//
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//                .replace(id, fragment)
+//                .addToBackStack("Book Detail")
+//                .commit();
+
+        FragmentNavigation.launchBookDetailFragment(((BaseActivity) getActivity()), ((MainActivity) getActivity()).getBinding(), fragment);
 
     }
 }

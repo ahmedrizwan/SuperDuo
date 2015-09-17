@@ -38,4 +38,5 @@
     <string name="books">List of Books</string>
     <string name="about">About this App</string>
     <string name="details">Book Details</string>
+    <string name="add">Add</string>
 </resources>

@@ -11,13 +11,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Toast;
 
-import it.jaschke.alexandria.api.Callback;
 import it.jaschke.alexandria.databinding.ActivityMainBinding;
-import it.jaschke.alexandria.fragments.BookDetail;
-import it.jaschke.alexandria.fragments.ListOfBooks;
 
 
-public class MainActivity extends BaseActivity implements Callback {
+public class MainActivity extends BaseActivity  {
 
     /**
      * Used to store the last screen title.
@@ -31,20 +28,21 @@ public class MainActivity extends BaseActivity implements Callback {
 
     ActivityMainBinding mActivityMainBinding;
 
+    public boolean tabletMode() {
+        return mActivityMainBinding.listContainer != null;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IS_TABLET = isTablet();
-        if (IS_TABLET) {
-//            setContentView(R.layout.activity_main_tablet);
-//            mActivityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main_tablet);
-        } else {
-            mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        }
+        mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        FragmentNavigation.launchBookListFragment(this, mActivityMainBinding);
 
         messageReceiver = new MessageReciever();
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,filter);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(messageReceiver, filter);
 
         //toolbar
         setSupportActionBar(mActivityMainBinding.mainToolbar);
@@ -75,28 +73,12 @@ public class MainActivity extends BaseActivity implements Callback {
                 }));
                 */
 
-        //load the list of books fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.includeContainer, new ListOfBooks())
-                .addToBackStack((String) title)
-                .commit();
-
-        //fab
-//        mActivityMainBinding.fab.setOnClickListener(view -> {
-//            //launch the fragment for scan
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.includeContainer, new AddBook())
-//                    .addToBackStack((String) title)
-//                    .commit();
-//        });
-
     }
 
 
     public void setTitle(int titleId) {
         title = getString(titleId);
     }
-
 
 
     @Override
@@ -106,24 +88,10 @@ public class MainActivity extends BaseActivity implements Callback {
         super.onDestroy();
     }
 
-    @Override
-    public void onItemSelected(String ean) {
-        Bundle args = new Bundle();
-        args.putString(BookDetail.EAN_KEY, ean);
 
-        BookDetail fragment = new BookDetail();
-        fragment.setArguments(args);
 
-        int id = R.id.includeContainer;
-        if (findViewById(R.id.right_container) != null) {
-            id = R.id.right_container;
-        }
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(id, fragment)
-                .addToBackStack("Book Detail")
-                .commit();
-
+    public ActivityMainBinding getBinding() {
+        return mActivityMainBinding;
     }
 
     private class MessageReciever extends BroadcastReceiver {

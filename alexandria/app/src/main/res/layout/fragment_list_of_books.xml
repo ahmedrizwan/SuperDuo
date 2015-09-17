@@ -2,17 +2,48 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-
-
 <RelativeLayout
                 android:layout_width="match_parent" android:layout_height="match_parent"
                 android:orientation="vertical"
                 tools:context="it.jaschke.alexandria.fragments.ListOfBooks">
 
+
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_margin"
+                        android:layout_marginStart="@dimen/default_margin"
+                        android:layout_marginRight="@dimen/default_margin"
+                        android:layout_marginEnd="@dimen/default_margin"
+
+                        android:textColorHint="@android:color/white"
+                        app:theme="@style/AppTheme.WhiteAccent"
+                        >
+
+                        <EditText
+                            android:id="@+id/editTextSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:hint="Search Books"
+                            android:singleLine="true"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            />
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+
     <TextView android:id="@+id/textViewBooks"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="16sp"
+              android:layout_below="@id/textInputLayout"
               android:fontFamily="sans-serif-light"
               android:text="@string/my_books"
               android:textColor="@android:color/black"

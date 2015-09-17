@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +32,7 @@ import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
 
 
-public class AddBook extends Fragment  {
+public class AddBook extends DialogFragment {
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
 
     private final int LOADER_ID = 1;
@@ -50,6 +50,11 @@ public class AddBook extends Fragment  {
     BookService.CategoryEvent mCategoryEvent;
 
     FragmentAddBookBinding mFragmentAddBookBinding;
+
+    public static AddBook getInstance() {
+        AddBook addBook = new AddBook();
+        return addBook;
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

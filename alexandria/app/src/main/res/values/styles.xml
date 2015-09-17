@@ -10,6 +10,11 @@
         <item name="actionModeBackground">@color/red_primary</item>
     </style>
 
+    <style name="AppTheme.WhiteAccent" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="colorPrimary">#FFFFFF</item>
+    </style>
+
     <color name="red_primary">#ec203e</color>
     <color name="red_primary_dark">#b81630</color>
     <color name="red_accent">#ec9600</color>
