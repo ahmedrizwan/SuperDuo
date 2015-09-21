@@ -1,18 +1,14 @@
 package it.jaschke.alexandria.fragments;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.jaschke.alexandria.BaseActivity;
 import it.jaschke.alexandria.FragmentNavigation;
 import it.jaschke.alexandria.MainActivity;
@@ -29,7 +28,6 @@ import it.jaschke.alexandria.SettingsActivity;
 import it.jaschke.alexandria.api.BookListAdapter;
 import it.jaschke.alexandria.api.Callback;
 import it.jaschke.alexandria.data.AlexandriaContract;
-import it.jaschke.alexandria.databinding.FragmentListOfBooksBinding;
 
 
 public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, Callback {
@@ -37,9 +35,16 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     private BookListAdapter bookListAdapter;
     private int position = ListView.INVALID_POSITION;
     private final int LOADER_ID = 10;
-    FragmentListOfBooksBinding mFragmentListOfBooksBinding;
     Cursor cursor;
     private String mSearchQuery = "";
+
+    @Bind(R.id.listOfBooks)
+     ListView listOfBooks;
+    @Bind(R.id.empty)
+     TextView empty;
+    @Bind(R.id.fab)
+     FloatingActionButton fab;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,18 +65,18 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFragmentListOfBooksBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_of_books, container, false);
-
-        mFragmentListOfBooksBinding.listOfBooks.setAdapter(bookListAdapter);
-        mFragmentListOfBooksBinding.listOfBooks.setEmptyView(mFragmentListOfBooksBinding.empty);
+        View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
+        ButterKnife.bind(this, rootView);
+        listOfBooks.setAdapter(bookListAdapter);
+        listOfBooks.setEmptyView(empty);
         //Item click listener for the listView
-        mFragmentListOfBooksBinding.listOfBooks.setOnItemClickListener((adapterView, view, position1, l) -> {
+        listOfBooks.setOnItemClickListener((adapterView, view, position1, l) -> {
             if (cursor != null && cursor.moveToPosition(position1)) {
                 onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
             }
         });
 
-        mFragmentListOfBooksBinding.fab.setOnClickListener(view -> {
+        fab.setOnClickListener(view -> {
             FragmentNavigation.launchAddBooksFragment((BaseActivity) getActivity(),
                     ((MainActivity) getActivity()).getBinding());
         });
@@ -90,7 +95,7 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
          */
         getLoaderManager().initLoader(0, null, this);
 
-        return mFragmentListOfBooksBinding.getRoot();
+        return rootView;
     }
 
     @Override
@@ -98,30 +103,20 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search)
-                        .getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setIconifiedByDefault(false);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                Log.e("Search Text", newText);
-                mSearchQuery = newText;
-                ListOfBooks.this.restartLoader();
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(final String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(final String newText) {
+//                Log.e("Search Text", newText);
+//                mSearchQuery = newText;
+//                ListOfBooks.this.restartLoader();
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -175,7 +170,7 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         bookListAdapter.swapCursor(data);
         if (position != ListView.INVALID_POSITION) {
-            mFragmentListOfBooksBinding.listOfBooks.smoothScrollToPosition(position);
+            listOfBooks.smoothScrollToPosition(position);
         }
     }
 

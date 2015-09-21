@@ -2,7 +2,6 @@ package it.jaschke.alexandria.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -17,11 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.jaschke.alexandria.BaseActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
-import it.jaschke.alexandria.databinding.FragmentFullBookBinding;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
 
@@ -32,7 +34,21 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     private final int LOADER_ID = 10;
     private String ean;
     private ShareActionProvider shareActionProvider;
-    FragmentFullBookBinding mFragmentFullBookBinding;
+
+    @Bind(R.id.delete_button)
+     View deleteButton;
+    @Bind(R.id.fullBookTitle)
+     TextView fullBookTitle;
+    @Bind(R.id.fullBookSubTitle)
+     TextView fullBookSubTitle;
+    @Bind(R.id.fullBookDesc)
+     TextView fullBookDesc;
+    @Bind(R.id.authors)
+     TextView authors;
+    @Bind(R.id.fullBookCover)
+     ImageView fullBookCover;
+    @Bind(R.id.categories)
+     TextView categories;
 
     public BookDetail(){
     }
@@ -53,9 +69,10 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
 
-        mFragmentFullBookBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_full_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_full_book, container, false);
+        ButterKnife.bind(this,rootView);
 
-        mFragmentFullBookBinding.deleteButton.setOnClickListener(view -> {
+        deleteButton.setOnClickListener(view -> {
             Intent bookIntent = new Intent(getActivity(), BookService.class);
             bookIntent.putExtra(BookService.EAN, ean);
             bookIntent.setAction(BookService.DELETE_BOOK);
@@ -70,7 +87,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             supportActionBar.setTitle(R.string.details);
         }
 
-        return mFragmentFullBookBinding.getRoot();
+        return rootView;
     }
 
 
@@ -101,7 +118,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         }
 
         String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
-        (mFragmentFullBookBinding.fullBookTitle).setText(bookTitle);
+        (fullBookTitle).setText(bookTitle);
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
@@ -110,26 +127,26 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         shareActionProvider.setShareIntent(shareIntent);
 
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
-        ((mFragmentFullBookBinding.fullBookSubTitle)).setText(bookSubTitle);
+        ((fullBookSubTitle)).setText(bookSubTitle);
 
         String desc = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.DESC));
-        ((mFragmentFullBookBinding.fullBookDesc)).setText(desc);
+        ((fullBookDesc)).setText(desc);
 
-        String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((mFragmentFullBookBinding.authors)).setLines(authorsArr.length);
-        ((mFragmentFullBookBinding.authors)).setText(authors.replace(",","\n"));
+        String authorsString = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
+        String[] authorsArr = authorsString.split(",");
+        ((authors)).setLines(authorsArr.length);
+        ((authors)).setText(authorsString.replace(",","\n"));
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if(Patterns.WEB_URL.matcher(imgUrl).matches()){
-            new DownloadImage((mFragmentFullBookBinding.fullBookCover)).execute(imgUrl);
-            mFragmentFullBookBinding.fullBookCover.setVisibility(View.VISIBLE);
+            new DownloadImage((fullBookCover)).execute(imgUrl);
+            fullBookCover.setVisibility(View.VISIBLE);
         }
 
-        String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
-        ((mFragmentFullBookBinding.categories)).setText(categories);
+        String categoriesString = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
+        ((categories)).setText(categoriesString);
 
-//        if(mFragmentFullBookBinding.right_container!=null){
-//           mFragmentFullBookBinding.backButton.setVisibility(View.INVISIBLE);
+//        if(right_container!=null){
+//           backButton.setVisibility(View.INVISIBLE);
 //        }
 
     }

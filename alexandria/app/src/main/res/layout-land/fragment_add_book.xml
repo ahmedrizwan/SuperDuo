@@ -1,8 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/apk/res-auto"
-    >
 <FrameLayout android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+             android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -131,4 +128,4 @@
 
     </RelativeLayout>
 </FrameLayout>
-    </layout>
+
