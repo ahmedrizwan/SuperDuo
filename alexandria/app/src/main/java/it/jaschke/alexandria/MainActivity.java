@@ -8,13 +8,18 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import it.jaschke.alexandria.databinding.ActivityMainBinding;
 
 
-public class MainActivity extends BaseActivity  {
+public class MainActivity extends BaseActivity {
 
     /**
      * Used to store the last screen title.
@@ -36,42 +41,16 @@ public class MainActivity extends BaseActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        //toolbar
+        setSupportActionBar(mActivityMainBinding.mainToolbar);
 
-        FragmentNavigation.launchBookListFragment(this, mActivityMainBinding);
+        if (savedInstanceState == null)
+            FragmentNavigation.launchBookListFragment(this, mActivityMainBinding);
 
         messageReceiver = new MessageReciever();
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(messageReceiver, filter);
-
-        //toolbar
-        setSupportActionBar(mActivityMainBinding.mainToolbar);
-
-        //DrawerLayout - Commented out because NavigationView not necessary for now
-        /*
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new
-                ActionBarDrawerToggle(this, drawerLayout, mActivityMainBinding.mainToolbar, R.string.open, R.string.close);
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setHomeButtonEnabled(true);
-        }
-        actionBarDrawerToggle.syncState();
-
-        mActivityMainBinding.drawerListView.setOnItemClickListener((parent, view, position, id) -> {
-
-        });
-        mActivityMainBinding.drawerListView.setAdapter(new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.books),
-                        getString(R.string.about),
-                }));
-                */
 
     }
 
@@ -87,7 +66,6 @@ public class MainActivity extends BaseActivity  {
                 .unregisterReceiver(messageReceiver);
         super.onDestroy();
     }
-
 
 
     public ActivityMainBinding getBinding() {
@@ -123,4 +101,24 @@ public class MainActivity extends BaseActivity  {
         super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_about:
+                new MaterialDialog.Builder(this)
+                        .title(R.string.about)
+                        .content(R.string.about_text)
+                        .positiveText(R.string.close)
+                        .show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

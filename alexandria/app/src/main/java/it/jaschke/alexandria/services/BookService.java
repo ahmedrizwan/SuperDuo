@@ -89,6 +89,8 @@ public class BookService extends IntentService {
 
         if(bookEntry.getCount()>0){
             bookEntry.close();
+            //Send exception message here
+            EventBus.getDefault().post(new Exception("Book already added!"));
             return;
         }
 
@@ -190,7 +192,6 @@ public class BookService extends IntentService {
                 imgUrl = bookInfo.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
             }
 
-
             writeBackBook(ean, title, subtitle, desc, imgUrl);
 
             if(bookInfo.has(AUTHORS)) {
@@ -201,9 +202,13 @@ public class BookService extends IntentService {
             }
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, "Error "+e.toString());
+            //Send exception message here
+            EventBus.getDefault().post(new Exception("Error: Could not get the book!"));
         } catch (NullPointerException e){
             Log.e(LOG_TAG, "Error "+e.toString());
+            //Send exception message here
+            EventBus.getDefault().post(new Exception("Error: Could not get the book!"));
         }
     }
 
@@ -216,7 +221,6 @@ public class BookService extends IntentService {
         values.put(AlexandriaContract.BookEntry.DESC, desc);
         //Send values back to the fragment
         EventBus.getDefault().post(new BookEvent(values));
-//        getContentResolver().insert(AlexandriaContract.BookEntry.CONTENT_URI,values);
     }
 
     private void writeBackAuthors(String ean, JSONArray jsonArray) throws JSONException {
@@ -227,7 +231,6 @@ public class BookService extends IntentService {
             values.put(AlexandriaContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
             authorEvent.getAuthorValues()
                     .add(values);
-//            getContentResolver().insert(AlexandriaContract.AuthorEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
         EventBus.getDefault().post(authorEvent);
@@ -241,7 +244,6 @@ public class BookService extends IntentService {
             values.put(AlexandriaContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
             categoryEvent.getCategoryValues()
                     .add(values);
-//            getContentResolver().insert(AlexandriaContract.CategoryEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
         EventBus.getDefault().post(categoryEvent);

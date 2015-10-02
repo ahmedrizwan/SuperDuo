@@ -39,4 +39,6 @@
     <string name="about">About this App</string>
     <string name="details">Book Details</string>
     <string name="add">Add</string>
+    <string name="action_about">About</string>
+    <string name="message_wait">Please wait...</string>
 </resources>

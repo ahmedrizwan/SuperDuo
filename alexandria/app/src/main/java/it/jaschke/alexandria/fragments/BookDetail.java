@@ -22,6 +22,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.jaschke.alexandria.BaseActivity;
+import it.jaschke.alexandria.FragmentNavigation;
+import it.jaschke.alexandria.MainActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
@@ -77,11 +79,12 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             bookIntent.putExtra(BookService.EAN, ean);
             bookIntent.setAction(BookService.DELETE_BOOK);
             getActivity().startService(bookIntent);
-            getActivity().getSupportFragmentManager().popBackStack();
+            FragmentNavigation.removeDetailsFragment(((MainActivity) getActivity()).getBinding(),
+                    (BaseActivity) getActivity(),this);
         });
 
         ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null) {
+        if (supportActionBar != null && !((MainActivity) getActivity()).tabletMode()) {
             supportActionBar
                     .setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle(R.string.details);

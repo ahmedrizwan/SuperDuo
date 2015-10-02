@@ -9,12 +9,13 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,11 +40,13 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     private String mSearchQuery = "";
 
     @Bind(R.id.listOfBooks)
-     ListView listOfBooks;
+    ListView listOfBooks;
     @Bind(R.id.empty)
-     TextView empty;
+    TextView empty;
     @Bind(R.id.fab)
-     FloatingActionButton fab;
+    FloatingActionButton fab;
+    @Bind(R.id.editTextSearch)
+    EditText mEditTextSearch;
 
 
     @Override
@@ -57,16 +60,15 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                         null, // values for "where" clause
                         null  // sort order
                       );
-
         bookListAdapter = new BookListAdapter(getActivity(), cursor, 0);
 
         setHasOptionsMenu(true);
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
-        ButterKnife.bind(this, rootView);
+    public void onResume() {
+        super.onResume();
         listOfBooks.setAdapter(bookListAdapter);
         listOfBooks.setEmptyView(empty);
         //Item click listener for the listView
@@ -75,6 +77,13 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                 onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
             }
         });
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
+        ButterKnife.bind(this, rootView);
 
         fab.setOnClickListener(view -> {
             FragmentNavigation.launchAddBooksFragment((BaseActivity) getActivity(),
@@ -95,28 +104,24 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
          */
         getLoaderManager().initLoader(0, null, this);
 
+        mEditTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+                mSearchQuery = s.toString();
+                ListOfBooks.this.restartLoader();
+            }
+
+            @Override
+            public void afterTextChanged(final Editable s) {
+
+            }
+        });
         return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(final String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(final String newText) {
-//                Log.e("Search Text", newText);
-//                mSearchQuery = newText;
-//                ListOfBooks.this.restartLoader();
-//                return false;
-//            }
-//        });
     }
 
     @Override
@@ -179,11 +184,7 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         bookListAdapter.swapCursor(null);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-    }
 
 
     @Override
@@ -194,17 +195,8 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         BookDetail fragment = new BookDetail();
         fragment.setArguments(args);
 
-//        int id = R.id.includeContainer;
-////        if (findViewById(R.id.right_container) != null) {
-////            id = R.id.right_container;
-////        }
-//
-//        getActivity().getSupportFragmentManager().beginTransaction()
-//                .replace(id, fragment)
-//                .addToBackStack("Book Detail")
-//                .commit();
-
-        FragmentNavigation.launchBookDetailFragment(((BaseActivity) getActivity()), ((MainActivity) getActivity()).getBinding(), fragment);
+        FragmentNavigation.launchBookDetailFragment(((BaseActivity) getActivity()),
+                ((MainActivity) getActivity()).getBinding(), fragment);
 
     }
 }
