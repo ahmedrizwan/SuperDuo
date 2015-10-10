@@ -2,8 +2,10 @@ package barqsoft.footballscores.activities
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
@@ -14,9 +16,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import barqsoft.footballscores.AboutActivity
+import barqsoft.footballscores.AlarmReciever
 import barqsoft.footballscores.R
 import barqsoft.footballscores.adapters.ScoresPageAdapter
 import barqsoft.footballscores.fragments.ScoresFragment
+import barqsoft.footballscores.sync.SyncAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,24 +38,8 @@ class MainActivity : AppCompatActivity() {
         val tabLayout = findViewById(R.id.tabLayout) as TabLayout
         setUpTabLayout(tabLayout, viewPager)
 
-        setUpAlarm()
+        SyncAdapter.initializeSyncAdapter(this)
 
-    }
-
-    private fun setUpAlarm() {
-        val calendar = Calendar.getInstance();
-
-        val now = Time();
-        now.setToNow();
-        calendar.set(Calendar.HOUR_OF_DAY, now.hour); // For 1 PM or 2 PM
-        calendar.set(Calendar.MINUTE, 15);
-        calendar.set(Calendar.SECOND, 0);
-        Log.e("Time", calendar.time.toString() +" and Current time is "+ now.hour+":"+now.minute)
-        val intent: Intent = Intent(FOOTBALL_ACTION)
-        val pi = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        val am: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager;
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pi)
     }
 
     private fun setUpTabLayout(tabLayout: TabLayout, viewPager: ViewPager) {
@@ -119,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         private val NUM_PAGES = 5
         var selected_match_id: Int = 0
         var current_fragment = 2
-        val FOOTBALL_ACTION = "barqsoft.footballscores.update";
+        val FOOTBALL_ACTION = "barqsoft.footballscores.update"
     }
+
 }

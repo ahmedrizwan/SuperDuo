@@ -14,9 +14,11 @@ public class AlarmReciever extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        Log.e("here", "Receiver");
         if (intent.getAction()
                 .equals(MainActivity.FOOTBALL_ACTION)) {
             Log.e("AlarmReciever", "Yo got to the Football reciever!");
+
         }
     }
 }
