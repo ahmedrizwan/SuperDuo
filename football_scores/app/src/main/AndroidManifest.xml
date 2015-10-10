@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,12 +28,28 @@
         <activity
             android:name=".AboutActivity"
             android:label="About"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="barqsoft.footballscores.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
-        <service android:name=".service.myFetchService" />
+        <service android:name=".service.FetchService" />
+
+        <receiver android:name=".WigdetProvider"
+            android:label="Scores">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:resource="@xml/widgetinfo"
+                       android:name="android.appwidget.provider"/>
+            </receiver>
+
+        <receiver android:name=".AlarmReciever" >
+            <intent-filter>
+                <action android:name="barqsoft.footballscores.update" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

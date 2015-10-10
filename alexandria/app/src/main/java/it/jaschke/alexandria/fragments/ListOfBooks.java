@@ -184,9 +184,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         bookListAdapter.swapCursor(null);
     }
 
-
-
-
     @Override
     public void onItemSelected(String ean) {
         Bundle args = new Bundle();

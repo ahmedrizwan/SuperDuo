@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="128dip"
+        android:layout_margin="16dip"
+        >
+        <!-- Image views on right and left -->
+        <ImageView android:id="@+id/home_crest"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:contentDescription="Home Team"
+                   android:src="@drawable/no_icon"
+                   app:layout_heightPercent="70%"
+                   app:layout_widthPercent="25%"/>
+
+        <ImageView android:id="@+id/away_crest"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:layout_alignParentRight="true"
+                   android:contentDescription="Home Team"
+                   android:src="@drawable/no_icon"
+                   app:layout_heightPercent="70%"
+                   app:layout_widthPercent="25%"/>
+
+
+        <!-- Scores and Time -->
+        <TextView
+            android:id="@+id/score_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/test_text"
+            android:textSize="@dimen/Score"
+            app:layout_widthPercent="50%"/>
+
+        <TextView
+            android:id="@+id/data_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/score_textview"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/test_text"
+            app:layout_widthPercent="50%"/>
+
+        <!-- Team Names -->
+        <TextView
+            android:id="@+id/home_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/home_crest"
+            android:layout_alignLeft="@id/home_crest"
+            android:layout_alignRight="@id/home_crest"
+            android:layout_alignStart="@id/home_crest"
+            android:layout_below="@id/home_crest"
+            android:gravity="center"
+            android:text="@string/test_text"
+            android:textSize="@dimen/TeamNames"/>
+
+        <TextView
+            android:id="@+id/away_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/away_crest"
+            android:layout_alignLeft="@id/away_crest"
+            android:layout_alignRight="@id/away_crest"
+            android:layout_alignStart="@id/away_crest"
+            android:layout_below="@id/away_crest"
+            android:gravity="center"
+            android:text="@string/test_text"
+            android:textSize="@dimen/TeamNames"/>
+
+    </android.support.percent.PercentRelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/details_fragment_container">
+    </FrameLayout>
+</android.support.v7.widget.CardView>
