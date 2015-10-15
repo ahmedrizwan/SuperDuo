@@ -3,7 +3,6 @@ package barqsoft.footballscores.widget;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.widget.RemoteViewsService;
 
 /**
@@ -14,7 +13,6 @@ import android.widget.RemoteViewsService;
 public class WidgetViewsService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(final Intent intent) {
-        Log.e("RemoteService", "onGetViewFactory");
         return new WidgetFactory(this.getApplicationContext(), intent);
     }
 }

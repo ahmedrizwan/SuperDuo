@@ -8,14 +8,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-
 
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.Utilities;
@@ -36,6 +34,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     private ListView score_list;
 
     public ScoresFragment() {
+        setArguments(new Bundle());
     }
 
     private void update_scores() {
@@ -59,13 +58,28 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
         mAdapter.setDetailMatchId(MainActivity.getSelectedMatchId());
         mAdapter.setmClickCallback(this);
         score_list.setAdapter(mAdapter);
+
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //Extra check
+        final Bundle arguments = getArguments();
+        if (arguments != null) {
+            final String[] dates = arguments.getStringArray(getString(R.string.key_fragment_date));
+            if (dates != null)
+                fragmentdate = dates;
+        }
         getLoaderManager().initLoader(SCORES_LOADER, null, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getArguments().putStringArray(getString(R.string.key_fragment_date), fragmentdate);
     }
 
     @Override
@@ -76,7 +90,6 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Log.e("Cursor Load Finished", cursor.getCount() + " ");
         mAdapter.swapCursor(cursor);
     }
 
@@ -87,7 +100,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     @Override
-    public void itemClicked( final Cursor cursor,  final ViewHolder viewHolder) {
+    public void itemClicked(final Cursor cursor, final ViewHolder viewHolder) {
         new MaterialDialog.Builder(getActivity())
                 .title(R.string.title_share)
                 .content(Utilities.getMatchDay(cursor.getInt(ScoresListAdapter.COL_MATCHDAY),

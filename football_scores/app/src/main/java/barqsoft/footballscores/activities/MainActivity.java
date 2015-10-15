@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public static int selected_match_id = 0;
     int current_fragment = 2;
     final String FOOTBALL_ACTION = "barqsoft.footballscores.update";
+    ScoresPageAdapter mScoresPageAdapter;
 
     public static int getSelectedMatchId() {
         return selected_match_id;
@@ -41,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EventBus.getDefault().register(this);
+        EventBus.getDefault()
+                .register(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
         ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LTR);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        mScoresPageAdapter = ScoresPageAdapter.getInstance(this, getSupportFragmentManager());
         setupViewPager(viewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         ViewCompat.setLayoutDirection(tabLayout, ViewCompat.LAYOUT_DIRECTION_LTR);
 
         //Extra check
-        if(isNetworkConnected()) {
+        if (isNetworkConnected()) {
             SyncAdapter.initializeSyncAdapter(this);
             SyncAdapter.syncImmediately(this);
         } else {
@@ -64,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         return cm.getActiveNetworkInfo() != null;
     }
 
@@ -91,28 +93,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEventMainThread(MessageEvent messageEvent) {
-        Toast.makeText(this, messageEvent.getMessageString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, messageEvent.getMessageString(), Toast.LENGTH_SHORT)
+                .show();
     }
 
     private void setupViewPager(final ViewPager viewPager) {
-        ScoresPageAdapter pageAdapter = ScoresPageAdapter.getInstance(this, getSupportFragmentManager());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (Utilities.isRTL())
-            for (int i = NUM_PAGES-1; i >= 0; i--) {
-                Date fragmentDate = new Date(System.currentTimeMillis() + ((i-2) * 86400000));
+            for (int i = NUM_PAGES - 1; i >= 0; i--) {
+                Date fragmentDate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
                 ScoresFragment viewFragment = new ScoresFragment();
                 viewFragment.setFragmentDate(format.format(fragmentDate));
-                pageAdapter.addFrag(viewFragment);
+                mScoresPageAdapter.addFrag(viewFragment);
             }
         else
             for (int i = 0; i < NUM_PAGES; i++) {
                 Date fragmentDate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
                 ScoresFragment viewFragment = new ScoresFragment();
-
                 viewFragment.setFragmentDate(format.format(fragmentDate));
-                pageAdapter.addFrag(viewFragment);
+                mScoresPageAdapter.addFrag(viewFragment);
             }
-        viewPager.setAdapter(pageAdapter);
+        viewPager.setAdapter(mScoresPageAdapter);
         viewPager.setCurrentItem(2);
     }
 

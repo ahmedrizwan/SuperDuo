@@ -91,37 +91,41 @@ public class ScoresProvider extends ContentProvider {
         Cursor retCursor;
         //Log.v(FetchScoreTask.LOG_TAG,uri.getPathSegments().toString());
         int match = match_uri(uri);
-        //Log.v(FetchScoreTask.LOG_TAG,SCORES_BY_LEAGUE);
-        //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[0]);
-        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(match));
-        switch (match) {
-            case MATCHES:
-                retCursor = mOpenHelper.getReadableDatabase()
-                        .query(DatabaseContract.SCORES_TABLE,
-                                projection, null, null, null, null, sortOrder);
-                break;
-            case MATCHES_WITH_DATE:
+        try {
+            //Log.v(FetchScoreTask.LOG_TAG,SCORES_BY_LEAGUE);
+            //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[0]);
+            //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(match));
+            switch (match) {
+                case MATCHES:
+                    retCursor = mOpenHelper.getReadableDatabase()
+                            .query(DatabaseContract.SCORES_TABLE,
+                                    projection, null, null, null, null, sortOrder);
+                    break;
+                case MATCHES_WITH_DATE:
 //                Log.v(ScoresProvider.LOG_TAG,selectionArgs[1]);
-                //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[2]);
-                Log.e("Matches with Date", selectionArgs[0]);
-                retCursor = mOpenHelper.getReadableDatabase()
-                        .query(DatabaseContract.SCORES_TABLE,
-                                projection, SCORES_BY_DATE, selectionArgs, null, null, sortOrder);
-                break;
-            case MATCHES_WITH_ID:
-                retCursor = mOpenHelper.getReadableDatabase()
-                        .query(DatabaseContract.SCORES_TABLE,
-                                projection, SCORES_BY_ID, selectionArgs, null, null, sortOrder);
-                break;
-            case MATCHES_WITH_LEAGUE:
-                retCursor = mOpenHelper.getReadableDatabase()
-                        .query(DatabaseContract.SCORES_TABLE,
-                                projection, SCORES_BY_LEAGUE, selectionArgs, null, null, sortOrder);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown Uri" + uri);
+                    //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[2]);
+//                Log.e("Matches with Date", selectionArgs[0]);
+                    retCursor = mOpenHelper.getReadableDatabase()
+                            .query(DatabaseContract.SCORES_TABLE,
+                                    projection, SCORES_BY_DATE, selectionArgs, null, null, sortOrder);
+                    break;
+                case MATCHES_WITH_ID:
+                    retCursor = mOpenHelper.getReadableDatabase()
+                            .query(DatabaseContract.SCORES_TABLE,
+                                    projection, SCORES_BY_ID, selectionArgs, null, null, sortOrder);
+                    break;
+                case MATCHES_WITH_LEAGUE:
+                    retCursor = mOpenHelper.getReadableDatabase()
+                            .query(DatabaseContract.SCORES_TABLE,
+                                    projection, SCORES_BY_LEAGUE, selectionArgs, null, null, sortOrder);
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Unknown Uri" + uri);
+            }
+            retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }catch (Exception e){
+            return null;
         }
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
 

@@ -28,4 +28,5 @@
     <string name="title_share">Share Scores</string>
     <string name="message_home_team">Home Team Crest</string>
     <string name="message_away_team">Away Team Crest</string>
+    <string name="key_fragment_date">Date</string>
 </resources>

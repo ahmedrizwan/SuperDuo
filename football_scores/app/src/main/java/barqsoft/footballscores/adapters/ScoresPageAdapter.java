@@ -3,7 +3,7 @@ package barqsoft.footballscores.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.text.format.Time;
 
 import java.text.SimpleDateFormat;
@@ -13,13 +13,14 @@ import java.util.List;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.Utilities;
 
-public class ScoresPageAdapter extends FragmentStatePagerAdapter {
+public class ScoresPageAdapter extends FragmentPagerAdapter {
 
-    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<Fragment> mFragmentList;
     private Context mContext;
 
     private ScoresPageAdapter(final FragmentManager fm) {
         super(fm);
+        mFragmentList = new ArrayList<>();
     }
 
     public static ScoresPageAdapter getInstance(Context context, FragmentManager fragmentManager) {
@@ -37,7 +38,6 @@ public class ScoresPageAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mFragmentList.size();
     }
-
 
     // Returns the page title for the top indicator
     @Override
