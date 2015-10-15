@@ -3,6 +3,7 @@ package barqsoft.footballscores.activities;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     int current_fragment = 2;
     final String FOOTBALL_ACTION = "barqsoft.footballscores.update";
     ScoresPageAdapter mScoresPageAdapter;
+    private ViewPager viewPager;
 
     public static int getSelectedMatchId() {
         return selected_match_id;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
         ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LTR);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         mScoresPageAdapter = ScoresPageAdapter.getInstance(this, getSupportFragmentManager());
         setupViewPager(viewPager);
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEventMainThread(MessageEvent messageEvent) {
-        Toast.makeText(this, messageEvent.getMessageString(), Toast.LENGTH_SHORT)
+        Snackbar.make(viewPager, messageEvent.getMessageString(), Toast.LENGTH_SHORT)
                 .show();
     }
 
