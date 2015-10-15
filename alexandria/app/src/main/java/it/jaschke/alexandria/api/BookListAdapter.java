@@ -20,6 +20,8 @@ import it.jaschke.alexandria.services.DownloadImage;
 public class BookListAdapter extends CursorAdapter {
 
 
+    private ClickCallback mCallback;
+
     public static class ViewHolder {
         public final ImageView bookCover;
         public final TextView bookTitle;
@@ -32,6 +34,9 @@ public class BookListAdapter extends CursorAdapter {
         }
     }
 
+    public void setClickCallback(ClickCallback callback){
+        mCallback = callback;
+    }
     public BookListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -49,6 +54,8 @@ public class BookListAdapter extends CursorAdapter {
 
         String bookSubTitle = cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
         viewHolder.bookSubTitle.setText(bookSubTitle);
+
+        view.setOnClickListener(v -> mCallback.onItemClicked(cursor));
     }
 
     @Override
