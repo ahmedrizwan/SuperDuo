@@ -6,5 +6,16 @@
     <dimen name="small_fontsize">12sp</dimen>
     <dimen name="default_margin">16sp</dimen>
     <dimen name="iv_search_margin">6sp</dimen>
+    <dimen name="margin_small">6dip</dimen>
+    <dimen name="text_large">22sp</dimen>
+    <dimen name="image_width_small">55dip</dimen>
+    <dimen name="list_height_large">72dip</dimen>
+    <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="image_width_large">150dip</dimen>
+    <dimen name="image_height_large">200dip</dimen>
+    <dimen name="margin_tiny">2dip</dimen>
+    <dimen name="image_width_medium">100dip</dimen>
+    <dimen name="image_height_medium">150dip</dimen>
 
 </resources>

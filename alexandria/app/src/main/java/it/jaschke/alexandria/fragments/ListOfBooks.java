@@ -3,7 +3,6 @@ package it.jaschke.alexandria.fragments;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.jaschke.alexandria.BaseActivity;
@@ -28,11 +30,10 @@ import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.SettingsActivity;
 import it.jaschke.alexandria.api.BookListAdapter;
 import it.jaschke.alexandria.api.Callback;
-import it.jaschke.alexandria.api.ClickCallback;
 import it.jaschke.alexandria.data.AlexandriaContract;
 
 
-public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, Callback,ClickCallback {
+public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, Callback {
 
     private BookListAdapter bookListAdapter;
     private int position = ListView.INVALID_POSITION;
@@ -45,9 +46,13 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     @Bind(R.id.empty)
     TextView empty;
     @Bind(R.id.fab)
-    FloatingActionButton fab;
+    FloatingActionMenu fab;
     @Bind(R.id.editTextSearch)
     EditText mEditTextSearch;
+    @Bind(R.id.addBookFab)
+    FloatingActionButton addBookFab;
+    @Bind(R.id.scanBookFab)
+    FloatingActionButton scanBookFab;
 
 
     @Override
@@ -55,8 +60,14 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
         ButterKnife.bind(this, rootView);
 
-        fab.setOnClickListener(view -> {
+        addBookFab.setOnClickListener(v -> {
             FragmentNavigation.launchAddBooksFragment((BaseActivity) getActivity(),
+                    ((MainActivity) getActivity()).getBinding());
+        });
+
+        scanBookFab.setOnClickListener(v -> {
+            //launch the scanner
+            FragmentNavigation.launchAddBooksFragmentForScan((BaseActivity) getActivity(),
                     ((MainActivity) getActivity()).getBinding());
         });
 
@@ -91,21 +102,36 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
 
             }
         });
-        cursor = getActivity().getContentResolver()
-                .query(
-                        AlexandriaContract.BookEntry.CONTENT_URI,
-                        null, // leaving "columns" null just returns all the columns.
-                        null, // cols for "where" clause
-                        null, // values for "where" clause
-                        null  // sort order
-                      );
+
         bookListAdapter = new BookListAdapter(getActivity(), cursor, 0);
-        bookListAdapter.setClickCallback(this);
+
         listOfBooks.setAdapter(bookListAdapter);
         listOfBooks.setEmptyView(empty);
+        listOfBooks.setOnItemClickListener((parent, view, position, id) -> {
+            //Bug fix, cursor was querying after data-change or rotation
+            cursor = getActivity().getContentResolver()
+                    .query(
+                            AlexandriaContract.BookEntry.CONTENT_URI,
+                            null, // leaving "columns" null just returns all the columns.
+                            null, // cols for "where" clause
+                            null, // values for "where" clause
+                            null  // sort order
+                          );
+            if (cursor != null && cursor.moveToPosition(position)) {
+                onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
+            }
+        });
+
+
         setHasOptionsMenu(true);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -118,7 +144,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                 break;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
 
@@ -181,10 +206,5 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
 
     }
 
-    @Override
-    public void onItemClicked(final Cursor cursor) {
-        if (cursor != null) {
-            onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
-        }
-    }
+
 }

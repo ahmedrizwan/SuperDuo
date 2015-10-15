@@ -1,47 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tool="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip"
-                android:layout_marginLeft="16sp"
-                android:layout_marginRight="16sp"
->
+                android:layout_height="wrap_content"
+    >
 
     <ImageView
         android:id="@+id/fullBookCover"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip"
+        android:layout_width="@dimen/image_width_small"
+        android:layout_height="@dimen/list_height_large"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginLeft="@dimen/default_margin"
         android:contentDescription="@string/book_cover"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher"/>
 
     <TextView
         android:id="@+id/listBookTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
+        android:layout_marginTop="6dip"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_toEndOf="@id/fullBookCover"
         android:layout_toRightOf="@id/fullBookCover"
-        android:gravity="center_vertical"
         android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
         android:maxLines="1"
-        android:textSize="16sp" />
-
+        android:textSize="@dimen/text_medium"
+        tool:text="Book Title"/>
 
     <TextView
         android:id="@+id/listBookSubTitle"
         android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:singleLine="true"
-        android:textSize="12sp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/listBookTitle"
+        android:layout_toEndOf="@+id/fullBookCover"
         android:layout_toRightOf="@+id/fullBookCover"
-        android:layout_toEndOf="@+id/fullBookCover"/>
-
+        android:layout_alignLeft="@id/listBookTitle"
+        android:layout_alignStart="@id/listBookTitle"
+        android:layout_marginRight="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="@dimen/text_small"
+        tool:text="Subtitle"/>
 
 </RelativeLayout>

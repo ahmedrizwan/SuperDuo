@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
@@ -22,19 +23,17 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import it.jaschke.alexandria.BaseActivity;
+import it.jaschke.alexandria.FragmentNavigation;
 import it.jaschke.alexandria.MainActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
-import it.jaschke.alexandria.services.DownloadImage;
-
 
 public class AddBook extends DialogFragment {
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
@@ -45,36 +44,36 @@ public class AddBook extends DialogFragment {
     BookService.AuthorEvent mAuthorEvent;
     BookService.CategoryEvent mCategoryEvent;
 
-    @Bind(R.id.ean)
     EditText mEditText;
-    @Bind(R.id.scan_button)
-     View scanButton;
-    @Bind(R.id.save_button)
-     View saveButton;
-    @Bind(R.id.delete_button)
-     View deleteButton;
-    @Bind(R.id.bookTitle)
-     TextView bookTitle;
-    @Bind(R.id.bookSubTitle)
-     TextView bookSubTitle;
-    @Bind(R.id.bookCover)
-     ImageView bookCover;
-    @Bind(R.id.authors)
-     TextView authors;
-    @Bind(R.id.categories)
-     TextView categories;
-    @Bind(R.id.textViewError)
+    View addButton;
+    View cancelButton;
+    TextView bookTitle;
+    TextView bookSubTitle;
+    ImageView bookCover;
+    TextView authors;
+    TextView categories;
     TextView mTextViewError;
 
 
-    public static AddBook getInstance() {
-        return new AddBook();
+    public static AddBook getInstance(Bundle bundle) {
+        final AddBook addBook = new AddBook();
+        addBook.setArguments(bundle);
+        return addBook;
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
-        ButterKnife.bind(this,rootView);
+        mEditText = (EditText) rootView.findViewById(R.id.ean);
+        addButton = rootView.findViewById(R.id.addButton);
+        cancelButton = rootView.findViewById(R.id.cancelButton);
+        bookTitle = (TextView) rootView.findViewById(R.id.bookTitle);
+        bookSubTitle = (TextView) rootView.findViewById(R.id.bookSubTitle);
+        bookCover = (ImageView) rootView.findViewById(R.id.bookCover);
+        authors = (TextView) rootView.findViewById(R.id.authors);
+        categories = (TextView) rootView.findViewById(R.id.categories);
+        mTextViewError = (TextView) rootView.findViewById(R.id.textViewError);
+
         EventBus.getDefault()
                 .register(this);
         ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
@@ -114,8 +113,30 @@ public class AddBook extends DialogFragment {
             }
         });
 
-        scanButton
-                .setOnClickListener(v -> {
+        addButton.setOnClickListener(view -> {
+            //save the book
+            saveBook();
+            Snackbar.make(addButton, "Book Added...", Snackbar.LENGTH_SHORT)
+                    .show();
+            //reset the fields
+            mEditText.setText("");
+            closeTheFragment();
+        });
+
+
+        cancelButton.setOnClickListener(view -> {
+           closeTheFragment();
+        });
+
+        if (savedInstanceState != null) {
+            mEditText.setText(savedInstanceState.getString(EAN_CONTENT));
+            mEditText.setHint("");
+        } else {
+            //Extra check
+            final Bundle arguments = getArguments();
+            if (arguments != null) {
+                final boolean scan = arguments.getBoolean(getString(R.string.key_scan), false);
+                if (scan) {
                     if (checkCameraHardware(getActivity())) {
                         IntentIntegrator.forSupportFragment(this)
                                 .initiateScan();
@@ -123,52 +144,44 @@ public class AddBook extends DialogFragment {
                         Toast.makeText(getActivity(), "No camera detected!", Toast.LENGTH_SHORT)
                                 .show();
                     }
-                });
-
-        saveButton
-                .setOnClickListener(view -> {
-                    //save the book
-                    saveBook();
-                    //TODO: show snackBar that book is saved
-
-                    //reset the fields
-                    mEditText.setText("");
-                });
-
-
-        deleteButton
-                .setOnClickListener(view -> {
-                    Intent bookIntent = new Intent(getActivity(), BookService.class);
-                    bookIntent.putExtra(BookService.EAN, mEditText.getText()
-                            .toString());
-                    bookIntent.setAction(BookService.DELETE_BOOK);
-                    getActivity().startService(bookIntent);
-                    mEditText.setText("");
-                });
-
-        if (savedInstanceState != null) {
-            mEditText.setText(savedInstanceState.getString(EAN_CONTENT));
-            mEditText.setHint("");
+                }
+            }
         }
 
         return rootView;
     }
 
+    private void closeTheFragment() {
+        dismiss();
+        if (!FragmentNavigation.tabletMode(((MainActivity) getActivity()).getBinding()))
+            getActivity().getSupportFragmentManager()
+                    .popBackStack();
+    }
+
     private void saveBook() {
         ContentResolver contentResolver = getActivity().getContentResolver();
         contentResolver.insert(AlexandriaContract.BookEntry.CONTENT_URI, mBookEvent.getBookValues());
-        for (ContentValues contentValues : mAuthorEvent.getAuthorValues()) {
-            contentResolver.insert(AlexandriaContract.AuthorEntry.CONTENT_URI, contentValues);
+        try {
+            for (ContentValues contentValues : mAuthorEvent.getAuthorValues()) {
+                contentResolver.insert(AlexandriaContract.AuthorEntry.CONTENT_URI, contentValues);
+            }
+        } catch (NullPointerException e) {
         }
-        for (ContentValues contentValues : mCategoryEvent.getCategoryValues()) {
-            contentResolver.insert(AlexandriaContract.CategoryEntry.CONTENT_URI, contentValues);
+        try {
+            for (ContentValues contentValues : mCategoryEvent.getCategoryValues()) {
+                contentResolver.insert(AlexandriaContract.CategoryEntry.CONTENT_URI, contentValues);
+            }
+        } catch (NullPointerException e) {
         }
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventBus.getDefault()
+                .unregister(this);
+
     }
 
     @Override
@@ -201,15 +214,7 @@ public class AddBook extends DialogFragment {
                 //Once we have an ISBN, start a book intent
                 String ean = result.getContents();
                 Log.e(TAG, "onActivityResult " + "Scanned: " + ean);
-                //catch isbn10 numbers
-                if (ean.length() == 10 && !ean.startsWith("978")) {
-                    ean = "978" + ean;
-                }
-                if (ean.length() < 13) {
-                    clearFields();
-                    return;
-                }
-
+                mEditText.setText(ean);
                 getBookThroughService(ean);
             }
         } else {
@@ -228,7 +233,7 @@ public class AddBook extends DialogFragment {
         getActivity().startService(bookIntent);
     }
 
-    public void onEventMainThread(BookService.BookEvent bookEvent){
+    public void onEventMainThread(BookService.BookEvent bookEvent) {
         mTextViewError.setVisibility(View.GONE);
         mBookEvent = bookEvent;
         ContentValues data = bookEvent.getBookValues();
@@ -242,24 +247,29 @@ public class AddBook extends DialogFragment {
         String imgUrl = data.getAsString((AlexandriaContract.BookEntry.IMAGE_URL));
         if (Patterns.WEB_URL.matcher(imgUrl)
                 .matches()) {
-            new DownloadImage(bookCover).execute(imgUrl);
-            bookCover
-                    .setVisibility(View.VISIBLE);
+            if (!imgUrl.isEmpty()) {
+                Picasso.with(getActivity())
+                        .load(imgUrl)
+                        .into(bookCover);
+            } else
+                bookCover.setImageResource(R.drawable.ic_not_available);
+
+            bookCover.setVisibility(View.VISIBLE);
         }
 
-        saveButton
+        addButton
                 .setVisibility(View.VISIBLE);
-        deleteButton
+        cancelButton
                 .setVisibility(View.VISIBLE);
     }
 
 
-    public void onEventMainThread(BookService.AuthorEvent authorEvent){
+    public void onEventMainThread(BookService.AuthorEvent authorEvent) {
         mAuthorEvent = authorEvent;
         List<ContentValues> listAuthorContentValues = authorEvent.getAuthorValues();
         String authorNames = "";
         for (ContentValues authorValues : listAuthorContentValues) {
-            authorNames+=authorValues.getAsString((AlexandriaContract.AuthorEntry.AUTHOR))+",";
+            authorNames += authorValues.getAsString((AlexandriaContract.AuthorEntry.AUTHOR)) + ",";
         }
 
         String[] authorsArr = authorNames.split(",");
@@ -268,18 +278,18 @@ public class AddBook extends DialogFragment {
     }
 
 
-    public void onEventMainThread(BookService.CategoryEvent categoryEvent){
+    public void onEventMainThread(BookService.CategoryEvent categoryEvent) {
         mCategoryEvent = categoryEvent;
         List<ContentValues> listCategoryContentValues = categoryEvent.getCategoryValues();
         String categoryNames = "";
         for (ContentValues categoryValues : listCategoryContentValues) {
-            categoryNames+=categoryValues.getAsString((AlexandriaContract.CategoryEntry.CATEGORY))+",";
+            categoryNames += categoryValues.getAsString((AlexandriaContract.CategoryEntry.CATEGORY)) + ",";
         }
 
         (categories).setText(categoryNames.substring(0, categoryNames.length() - 1));
     }
 
-    public void onEventMainThread(Exception exception){
+    public void onEventMainThread(Exception exception) {
         mTextViewError.setText(exception.getMessage());
         mTextViewError.setVisibility(View.VISIBLE);
     }
@@ -291,9 +301,9 @@ public class AddBook extends DialogFragment {
         categories.setText("");
         (bookCover)
                 .setVisibility(View.INVISIBLE);
-        saveButton
+        addButton
                 .setVisibility(View.INVISIBLE);
-        deleteButton
+        cancelButton
                 .setVisibility(View.INVISIBLE);
     }
 

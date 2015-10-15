@@ -1,89 +1,114 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-<RelativeLayout
-                android:layout_width="match_parent" android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:context="it.jaschke.alexandria.fragments.ListOfBooks">
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="it.jaschke.alexandria.fragments.ListOfBooks">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/secondaryToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        >
-        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
-        <LinearLayout
-            android:focusable="true" android:focusableInTouchMode="true"
-            android:layout_width="0px" android:layout_height="0px"/>
-    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_margin"
-                        android:layout_marginStart="@dimen/default_margin"
-                        android:layout_marginRight="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/secondaryToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
 
-                        android:textColorHint="@android:color/white"
-                        app:theme="@style/AppTheme.WhiteAccent"
-                        >
+            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
 
-                        <EditText
-                            android:id="@+id/editTextSearch"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:hint="Search Books"
-                            android:singleLine="true"
-                            android:textColor="@android:color/white"
-                            android:textColorHint="@android:color/white"
-                            />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin"
 
-                    </android.support.design.widget.TextInputLayout>
+                android:textColorHint="@android:color/white"
+                app:theme="@style/AppTheme.WhiteAccent"
+                >
 
-</android.support.v7.widget.Toolbar>
+                <EditText
+                    android:id="@+id/editTextSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="Search Books"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    />
 
-    <TextView android:id="@+id/textViewBooks"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_margin="16sp"
-              android:layout_below="@id/secondaryToolbar"
-              android:fontFamily="sans-serif-light"
-              android:text="@string/my_books"
-              android:textColor="@android:color/black"
-              android:textSize="22sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <TextView android:id="@+id/textViewBooks"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/secondaryToolbar"
+                  android:layout_margin="16sp"
+                  android:fontFamily="sans-serif-light"
+                  android:text="@string/my_books"
+                  android:textColor="@android:color/black"
+                  android:textSize="@dimen/text_large"/>
+
+        <ListView android:id="@+id/listOfBooks"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_below="@id/textViewBooks"
+
+            />
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/empty_message"
+            />
 
 
-    <ListView android:id="@+id/listOfBooks"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_below="@id/textViewBooks"
-
-        />
-
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="@string/empty_message"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16sp"
-        android:src="@mipmap/ic_plus"
-        app:borderWidth="0dp"/>
-
-</RelativeLayout>
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/default_margin"
+            android:src="@mipmap/ic_plus"
+            app:borderWidth="0dp"
+            fab:menu_colorNormal="@color/red_accent"
+            >
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/scanBookFab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_scan"
+                fab:fab_colorNormal="@color/red_primary"
+                fab:fab_label="Scan ISBN"
+                fab:fab_size="mini"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/addBookFab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6sp"
+                android:src="@drawable/ic_action_write"
+                fab:fab_colorNormal="@color/red_primary"
+                fab:fab_label="Write ISBN"
+                fab:fab_size="mini"/>
+        </com.github.clans.fab.FloatingActionMenu>
+    </RelativeLayout>
 
 </layout>

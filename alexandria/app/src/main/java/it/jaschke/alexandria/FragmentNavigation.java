@@ -1,5 +1,6 @@
 package it.jaschke.alexandria;
 
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +23,8 @@ public class FragmentNavigation {
     public static void launchAddBooksFragment(final AppCompatActivity context, final ActivityMainBinding activityMainBinding) {
         if (tabletMode(activityMainBinding)) {
             //Show dialog fragment for the AddBook
-            AddBook.getInstance().show(context.getSupportFragmentManager(),"AddBook");
+            AddBook.getInstance(new Bundle())
+                    .show(context.getSupportFragmentManager(), "AddBook");
         } else {
             context.getSupportFragmentManager()
                     .beginTransaction()
@@ -37,12 +39,14 @@ public class FragmentNavigation {
         if (tabletMode(activityMainBinding)) {
             //it's tablet mode
             //add the book list fragment in listContainer
-            context.getSupportFragmentManager().beginTransaction()
+            context.getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(activityMainBinding.listContainer.getId(), new ListOfBooks())
                     .addToBackStack(null)
                     .commit();
         } else {
-            context.getSupportFragmentManager().beginTransaction()
+            context.getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(activityMainBinding.includeContainer.getId(), new ListOfBooks())
                     .addToBackStack(null)
                     .commit();
@@ -52,7 +56,7 @@ public class FragmentNavigation {
     public static void launchBookDetailFragment(final BaseActivity activity,
                                                 final ActivityMainBinding activityMainBinding, final BookDetail fragment) {
         Log.e("Fragment", "Here");
-        if(tabletMode(activityMainBinding)) {
+        if (tabletMode(activityMainBinding)) {
 
             activity.getSupportFragmentManager()
                     .beginTransaction()
@@ -60,24 +64,44 @@ public class FragmentNavigation {
                     .commit();
             //hide the "Select book to show details" message
             activityMainBinding.textViewSelectBook.setVisibility(View.GONE);
-        }else {
-            activity.getSupportFragmentManager().beginTransaction()
-                .replace(activityMainBinding.includeContainer.getId(), fragment)
-                .addToBackStack("Book Detail")
-                .commit();
+        } else {
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(activityMainBinding.includeContainer.getId(), fragment)
+                    .addToBackStack("Book Detail")
+                    .commit();
         }
     }
 
-    public static void removeDetailsFragment(final ActivityMainBinding activityMainBinding, final BaseActivity activity, BookDetail fragment){
-        if(tabletMode(activityMainBinding)) {
+    public static void removeDetailsFragment(final ActivityMainBinding activityMainBinding, final BaseActivity activity, BookDetail fragment) {
+        if (tabletMode(activityMainBinding)) {
             activity.getSupportFragmentManager()
                     .beginTransaction()
                     .remove(fragment)
                     .commit();
             //hide the "Select book to show details" message
             activityMainBinding.textViewSelectBook.setVisibility(View.VISIBLE);
-        } else{
-            activity.getSupportFragmentManager().popBackStack();
+        } else {
+            activity.getSupportFragmentManager()
+                    .popBackStack();
+        }
+    }
+
+    public static void launchAddBooksFragmentForScan(final BaseActivity activity, final ActivityMainBinding activityMainBinding) {
+        final Bundle args = new Bundle();
+        args.putBoolean(activity.getString(R.string.key_scan), true);
+        if (tabletMode(activityMainBinding)) {
+            //Show dialog fragment for the AddBook
+            AddBook.getInstance(args)
+                    .show(activity.getSupportFragmentManager(), "AddBook");
+        } else {
+            final AddBook addBook = new AddBook();
+            addBook.setArguments(args);
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(activityMainBinding.includeContainer.getId(), addBook)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }

@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.jaschke.alexandria.BaseActivity;
@@ -27,7 +29,6 @@ import it.jaschke.alexandria.MainActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
-import it.jaschke.alexandria.services.DownloadImage;
 
 
 public class BookDetail extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -37,7 +38,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     private String ean;
     private ShareActionProvider shareActionProvider;
 
-    @Bind(R.id.delete_button)
+    @Bind(R.id.deleteButton)
      View deleteButton;
     @Bind(R.id.fullBookTitle)
      TextView fullBookTitle;
@@ -123,12 +124,15 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
         (fullBookTitle).setText(bookTitle);
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text)+ bookTitle);
-        shareActionProvider.setShareIntent(shareIntent);
+        try {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
+            shareActionProvider.setShareIntent(shareIntent);
+        }catch (NullPointerException e){
 
+        }
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
         ((fullBookSubTitle)).setText(bookSubTitle);
 
@@ -136,21 +140,25 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         ((fullBookDesc)).setText(desc);
 
         String authorsString = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authorsString.split(",");
-        ((authors)).setLines(authorsArr.length);
-        ((authors)).setText(authorsString.replace(",","\n"));
+        if (authorsString != null) {
+            String[] authorsArr = authorsString.split(",");
+            ((authors)).setLines(authorsArr.length);
+            ((authors)).setText(authorsString.replace(",","\n"));
+        }
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if(Patterns.WEB_URL.matcher(imgUrl).matches()){
-            new DownloadImage((fullBookCover)).execute(imgUrl);
+            if(!imgUrl.isEmpty()){
+                Picasso.with(getActivity()).load(imgUrl).into(fullBookCover);
+            } else
+                fullBookCover.setImageResource(R.drawable.ic_not_available);
             fullBookCover.setVisibility(View.VISIBLE);
+        } else {
+            fullBookCover.setImageResource(R.drawable.ic_not_available);
         }
 
         String categoriesString = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
         ((categories)).setText(categoriesString);
-
-//        if(right_container!=null){
-//           backButton.setVisibility(View.INVISIBLE);
-//        }
 
     }
 
@@ -159,11 +167,4 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     }
 
-    @Override
-    public void onPause() {
-        super.onDestroyView();
-//        if(MainActivity.IS_TABLET && mFragmentFullBookBinding==null){
-//            getActivity().getSupportFragmentManager().popBackStack();
-//        }
-    }
 }

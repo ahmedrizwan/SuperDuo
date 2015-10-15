@@ -41,4 +41,8 @@
     <string name="add">Add</string>
     <string name="action_about">About</string>
     <string name="message_wait">Please wait...</string>
+    <string name="confirm">Confirm</string>
+    <string name="key_scan">ScanMode</string>
+    <string name="message_isbn_intro">Type in the ISBN Code for your book, once done - the app will automatically fetch the book and display the content (using magic of course).</string>
+    <string name="message_select_book">Select book to show details...</string>
 </resources>
