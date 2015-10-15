@@ -14,6 +14,7 @@ import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by ahmedrizwan on 10/10/2015.
+ *
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml")
@@ -27,7 +28,6 @@ public class MainActivityTests {
         assertEquals(viewPager.getAdapter()
                 .getPageTitle(2)
                 .toString(), "Today");
-
     }
 
 

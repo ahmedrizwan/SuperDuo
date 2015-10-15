@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout android:id="@+id/widget"
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/white"
+    >
+
+    <ListView
+        android:id="@+id/scores_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <TextView android:id="@+id/emptyView"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <LinearLayout   android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-        android:id="@+id/widget">
-        <ImageView android:layout_width="40dp"
-                   android:layout_height="40dp"
-                   android:id="@+id/image"
-            android:src="@drawable/ac_chievo_verona"/>
-        <ListView
-            android:id="@+id/scores_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="5sp"
-            android:layout_margin="5sp"
-            />
-
-    </LinearLayout>
-
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:text="@string/message_no_matches"
+              android:textColor="@android:color/black"/>
 
 </FrameLayout>

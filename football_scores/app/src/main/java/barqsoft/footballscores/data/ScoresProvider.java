@@ -1,4 +1,4 @@
-package barqsoft.footballscores;
+package barqsoft.footballscores.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -101,8 +101,9 @@ public class ScoresProvider extends ContentProvider {
                                 projection, null, null, null, null, sortOrder);
                 break;
             case MATCHES_WITH_DATE:
-                //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[1]);
+//                Log.v(ScoresProvider.LOG_TAG,selectionArgs[1]);
                 //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[2]);
+                Log.e("Matches with Date", selectionArgs[0]);
                 retCursor = mOpenHelper.getReadableDatabase()
                         .query(DatabaseContract.SCORES_TABLE,
                                 projection, SCORES_BY_DATE, selectionArgs, null, null, sortOrder);
@@ -120,7 +121,6 @@ public class ScoresProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown Uri" + uri);
         }
-        Log.e("Cursor", retCursor.getCount() + "");
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
@@ -132,14 +132,15 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        Log.e("Bulk Insert", values.length + "");
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         //db.delete(DatabaseContract.SCORES_TABLE,null,null);
         //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(muriMatcher.match(uri)));
+        int returncount = 0;
         switch (match_uri(uri)) {
             case MATCHES:
+                Log.e("Matches Bulk Insert", values.length + " ");
                 db.beginTransaction();
-                int returncount = 0;
+
                 try {
                     for (ContentValues value : values) {
                         long _id = db.insertWithOnConflict(DatabaseContract.SCORES_TABLE, null, value,
@@ -152,16 +153,34 @@ public class ScoresProvider extends ContentProvider {
                 } finally {
                     db.endTransaction();
                 }
+
                 getContext().getContentResolver()
                         .notifyChange(uri, null);
-                return returncount;
-            default:
-                return super.bulkInsert(uri, values);
         }
+        return returncount;
     }
+
+
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = match_uri(uri);
+        int rowsDeleted=0;
+        // this makes delete all rows return the number of rows deleted
+        if ( null == selection ) selection = "1";
+        Log.e("Match", match + "");
+        switch (match) {
+            case MATCHES:
+                Log.e("Row", "Here to delete "+selection);
+                rowsDeleted = db.delete(DatabaseContract.SCORES_TABLE, selection, selectionArgs);
+                break;
+        }
+        Log.e("RowsDeleted", rowsDeleted + "");
+        // Because a null deletes all rows
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 }

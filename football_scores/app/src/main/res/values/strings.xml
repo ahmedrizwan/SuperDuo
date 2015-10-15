@@ -2,17 +2,10 @@
 <resources>
 
     <string name="app_name">Football Scores</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="test_text">Test</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="tomorrow">Tomorrow</string>
-    <string name="champions_league">UEFA Champions League</string>
-    <string name="bundesliga">Bundesliga</string>
-    <string name="premierleague">Premier League</string>
-    <string name="primeradivison">Primera Division</string>
-    <string name="seriaa">Serie A</string>
     <string name="matchday_text">Match day</string>
     <string name="group_stage_text">Group stages</string>
     <string name="first_knockout_round">First knockout round</string>
@@ -21,20 +14,18 @@
     <string name="final_text">Final</string>
     <string name="share_text">Share</string>
     <string name="about">About</string>
+    <string name="close">Close</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="about_text">
-        This Application get Football Matches Score for the Premier League,Seria A,Bundesliga,Primera Division
-        and the Uefa Champions League.
-        All Matches data are acquired from football-data.org free API.
-        All team Logos are acquired from http://hdlogo.wordpress.com/ upon requesting permission form the owner.
-        The original version of this app was created by Yahia Khalid Ibn El Walid Ahmed, and a modified version is given to students in the Udacity Android Nanodegree program.
-        To report any bugs,or suggestions do not hesitate to send a mail to y.k.ibnelwalid@gmail.com.
-
-        During the off season, fake data will be added to the app.
+        This App provides the latest match scores for your favorite football leagues!\nProject 3!\nNanodegree!
     </string>
-    <string name="widget_text">This is a widget probably.</string>
-    <string name="dummy_data">{\"timeFrameStart\":\"2015-06-18\",\"timeFrameEnd\":\"2015-06-19\",\"count\":1,\"fixtures\":[{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/140514\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"date\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/140514\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"date\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/140514\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"date\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/140514\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"date\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/140514\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"date\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}}]}</string>
-    <string name="api_key"></string>
-    <string name="content_authority">barqsoft.footballscores</string>
-    <string name="sync_account_type">barqsoft.footballscores</string>
+    <string name="dummy_data">{\"timeFrameStart\":\"2015-10-11\",\"timeFrameEnd\":\"2015-10-13\",\"count\":5,\"fixtures\":[{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/147903\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/400\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/250\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/1048\"}},\"date\":\"2015-10-11T10:00:00Z\",\"status\":\"FINISHED\",\"matchday\":8,\"homeTeamName\":\"Real Valladolid\",\"awayTeamName\":\"Real Oviedo\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":3}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/147781\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/400\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/596\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/295\"}},\"date\":\"2015-10-11T15:00:00Z\",\"status\":\"FINISHED\",\"matchday\":8,\"homeTeamName\":\"CD Lugo\",\"awayTeamName\":\"Córdoba CF\",\"result\":{\"goalsHomeTeam\":1,\"goalsAwayTeam\":2}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/147782\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/400\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/89\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/744\"}},\"date\":\"2015-10-11T15:00:00Z\",\"status\":\"FINISHED\",\"matchday\":8,\"homeTeamName\":\"RCD Mallorca\",\"awayTeamName\":\"UE Llagostera\",\"result\":{\"goalsHomeTeam\":1,\"goalsAwayTeam\":0}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/147776\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/400\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/237\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/91\"}},\"date\":\"2015-10-11T15:00:00Z\",\"status\":\"FINISHED\",\"matchday\":8,\"homeTeamName\":\"Albacete\",\"awayTeamName\":\"Real Zaragoza\",\"result\":{\"goalsHomeTeam\":1,\"goalsAwayTeam\":3}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/147777\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/400\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/304\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/299\"}},\"date\":\"2015-10-11T15:00:00Z\",\"status\":\"FINISHED\",\"matchday\":8,\"homeTeamName\":\"AD Alcorcón\",\"awayTeamName\":\"Huesca\",\"result\":{\"goalsHomeTeam\":0,\"goalsAwayTeam\":1}}]}</string>
+
+    <string name="message_no_matches" translatable="true">No scores for the day…</string>
+    <string name="api_key" translatable="false"></string>
+    <string name="content_authority" translatable="false">barqsoft.footballscores</string>
+    <string name="sync_account_type" translatable="false">barqsoft.footballscores</string>
+    <string name="title_share">Share Scores</string>
+    <string name="message_home_team">Home Team Crest</string>
+    <string name="message_away_team">Away Team Crest</string>
 </resources>

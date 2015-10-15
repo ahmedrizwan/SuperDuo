@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="barqsoft.footballscores" >
+<manifest package="barqsoft.footballscores"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- This permission is necessary in order for network access. -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- Permissions required by the sync adapter -->
     <uses-permission
         android:name="android.permission.READ_SYNC_SETTINGS"/>
@@ -17,47 +18,32 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name" >
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <provider
-            android:name=".ScoresProvider"
-            android:authorities="barqsoft.footballscores" />
+            android:name=".data.ScoresProvider"
+            android:authorities="barqsoft.footballscores"/>
 
-        <activity
-            android:name=".AboutActivity"
-            android:label="About"
-            android:parentActivityName=".activities.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
-
-        <receiver android:name=".WigdetProvider"
-            android:label="Scores">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <meta-data android:resource="@xml/widgetinfo"
-                       android:name="android.appwidget.provider"/>
-            </receiver>
 
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.AuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                android:resource="@xml/authenticator"/>
         </service>
 
         <!-- The SyncAdapter service -->
@@ -66,12 +52,34 @@
             android:exported="true"
             >
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
+                android:resource="@xml/syncadapter"/>
         </service>
+
+        <receiver android:name=".widget.WidgetProvider"
+                  android:label="Scores">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/widgetinfo"/>
+        </receiver>
+
+        <service
+            android:name=".widget.WidgetViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" >
+        </service>
+
+        <!-- Extra check for connectivity -->
+        <receiver android:name=".sync.NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

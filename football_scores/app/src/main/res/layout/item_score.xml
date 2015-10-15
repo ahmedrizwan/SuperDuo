@@ -7,15 +7,17 @@
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="128dip"
-        android:layout_margin="16dip"
+        android:layout_height="@dimen/item_large"
+        android:layout_margin="@dimen/margin_default"
         >
         <!-- Image views on right and left -->
         <ImageView android:id="@+id/home_crest"
                    android:layout_width="wrap_content"
                    android:layout_height="match_parent"
-                   android:contentDescription="Home Team"
+                   android:contentDescription="@string/message_home_team"
                    android:src="@drawable/no_icon"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
                    app:layout_heightPercent="70%"
                    app:layout_widthPercent="25%"/>
 
@@ -23,11 +25,11 @@
                    android:layout_width="wrap_content"
                    android:layout_height="match_parent"
                    android:layout_alignParentRight="true"
-                   android:contentDescription="Home Team"
+                   android:layout_alignParentEnd="true"
+                   android:contentDescription="@string/message_away_team"
                    android:src="@drawable/no_icon"
                    app:layout_heightPercent="70%"
                    app:layout_widthPercent="25%"/>
-
 
         <!-- Scores and Time -->
         <TextView
@@ -80,9 +82,5 @@
             android:textSize="@dimen/TeamNames"/>
 
     </android.support.percent.PercentRelativeLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/details_fragment_container">
-    </FrameLayout>
+
 </android.support.v7.widget.CardView>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/list_item"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:padding="16dip"
+    >
+
+    <ImageView
+        android:id="@+id/imageViewHome"
+        android:layout_width="@dimen/image_view_small"
+        android:layout_height="@dimen/image_view_small"
+        android:layout_margin="@dimen/margin_small"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/message_home_team"/>
+
+    <TextView
+        android:id="@+id/homeScore" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/test_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/imageViewHome"
+        android:layout_alignBottom="@id/imageViewHome"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/textViewHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imageViewHome"
+        android:layout_toLeftOf="@id/homeScore"
+        android:layout_toEndOf="@id/imageViewHome"
+        android:layout_toStartOf="@id/homeScore"
+        android:singleLine="true"
+        android:text="@string/test_text"
+        android:layout_alignTop="@id/imageViewHome"
+        android:layout_alignBottom="@id/imageViewHome"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        />
+
+    <ImageView
+        android:id="@+id/imageViewAway"
+        android:layout_width="@dimen/image_view_small"
+        android:layout_height="@dimen/image_view_small"
+        android:layout_margin="@dimen/margin_small"
+        android:layout_below="@id/imageViewHome"
+        android:contentDescription="@string/message_away_team"/>
+
+    <TextView
+        android:id="@+id/awayScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/test_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/imageViewHome"
+        android:layout_alignTop="@id/imageViewAway"
+        android:layout_alignBottom="@id/imageViewAway"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/textViewAway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/imageViewAway"
+        android:layout_toEndOf="@id/imageViewAway"
+        android:layout_toLeftOf="@id/awayScore"
+        android:layout_toStartOf="@id/awayScore"
+        android:layout_below="@id/imageViewHome"
+        android:layout_alignTop="@id/imageViewAway"
+        android:layout_alignBottom="@id/imageViewAway"
+        android:gravity="center_vertical"
+        android:text="@string/test_text"
+        android:textColor="@android:color/black"
+        />
+
+</RelativeLayout>

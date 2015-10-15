@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.Utilities;
 
 public class ScoresPageAdapter extends FragmentStatePagerAdapter {
 
@@ -41,13 +42,14 @@ public class ScoresPageAdapter extends FragmentStatePagerAdapter {
     // Returns the page title for the top indicator
     @Override
     public CharSequence getPageTitle(int position) {
+        if(Utilities.isRTL())
+            return getDayName(mContext, System.currentTimeMillis() + ((2-position) * 86400000));
         return getDayName(mContext, System.currentTimeMillis() + ((position - 2) * 86400000));
     }
 
     public String getDayName(Context context, long dateInMillis) {
         // If the date is today, return the localized version of "Today" instead of the actual
         // day name.
-
         Time t = new Time();
         t.setToNow();
         int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);

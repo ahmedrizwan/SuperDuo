@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Football Scores</string>
+    <string name="today">اليوم</string>
+    <string name="yesterday">اليوم السابق</string>
+    <string name="tomorrow">غدا</string>
+    <string name="matchday_text">يوم المباراة</string>
+    <string name="group_stage_text">Group stages</string>
+    <string name="first_knockout_round">First knockout round</string>
+    <string name="quarter_final">Quarter Final</string>
+    <string name="semi_final">Semi Final</string>
+    <string name="final_text">Final</string>
+    <string name="share_text">Share</string>
+    <string name="about">About</string>
+    <string name="close">Close</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="about_text">
+        This App provides the latest match scores for your favorite football leagues!\nProject 3!\nOne word or maybe two… Nanodegree!
+    </string>
+    <string name="message_no_matches">لا عشرات لهذا اليوم…</string>
+
+</resources>
